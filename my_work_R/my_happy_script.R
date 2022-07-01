@@ -5,13 +5,9 @@ library(stringr)
 library(sbtools)
 library(whisker)
 
-project_output_dir <- 'my_dir'
-
-dir.create(project_output_dir)
-
 
 # Get the data from ScienceBase
-mendota_file <- file.path(project_output_dir, 'model_RMSEs.csv')
+mendota_file <- file.path("my_dir", 'model_RMSEs.csv')
 item_file_download('5d925066e4b0c4f70d0d0599', names = 'me_RMSE.csv', destinations = mendota_file, overwrite_file = TRUE)
 
 
@@ -30,7 +26,7 @@ eval_data <- readr::read_csv(mendota_file, col_types = 'iccd') %>%
 
 
 # Create a plot
-png(file = file.path(project_output_dir, 'figure_1.png'), width = 8, height = 10, res = 200, units = 'in')
+png(file = file.path("my_dir", 'figure_1.png'), width = 8, height = 10, res = 200, units = 'in')
 par(omi = c(0,0,0.05,0.05), mai = c(1,1,0,0), las = 1, mgp = c(2,.5,0), cex = 1.5)
 
 plot(NA, NA, xlim = c(2, 1000), ylim = c(4.7, 0.75),
@@ -74,7 +70,7 @@ dev.off()
 
 
 # Save the processed data
-readr::write_csv(eval_data, file = file.path(project_output_dir, 'model_summary_results.csv'))
+readr::write_csv(eval_data, file = file.path("my_dir", 'model_summary_results.csv'))
 
 
 # Save the model diagnostics
@@ -93,4 +89,4 @@ template_1 <- 'resulted in mean RMSEs (means calculated as average of RMSEs from
   ({{dl_500mean}} and {{pb_500mean}}°C, respectively) or more, but worse than PB when training was reduced to 100 profiles ({{dl_100mean}} and {{pb_100mean}}°C respectively) or fewer.
   The PGDL prediction accuracy was more robust compared to PB when only two profiles were provided for training ({{pgdl_2mean}} and {{pb_2mean}}°C, respectively). '
 
-whisker.render(template_1 %>% str_remove_all('\n') %>% str_replace_all('  ', ' '), render_data ) %>% cat(file = file.path(project_output_dir, 'model_diagnostic_text.txt'))
+whisker.render(template_1 %>% str_remove_all('\n') %>% str_replace_all('  ', ' '), render_data ) %>% cat(file = file.path("my_dir", 'model_diagnostic_text.txt'))
